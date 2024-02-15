@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -10,7 +11,7 @@ import food from '../../public/food.jpg';
 
 
 const categoryLink = 'flex items-center gap-3 capitalize ml-6 font-semibold'
-const imageLink = 'rounded-[50px] '
+const imageLink = 'rounded-[50%] '
 const CategoryList = () => {
 
   return (

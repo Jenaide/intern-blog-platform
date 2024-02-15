@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import AuthLinks from '../components/authLinks'
 import { ImFacebook2 } from "react-icons/im";

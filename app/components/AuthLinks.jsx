@@ -1,17 +1,20 @@
+"use client";
+
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 
 const AuthLinks = () => {
 
-  const status = "authenticated"
+  const { status } = useSession();
   return (
     <>
-      {status === "notauthenticated" ? (
+      {status === "unauthenticated" ? (
         <Link href='/login'>Login</Link>
       ) : (
         <>
           <Link href='/write'>Write</Link>
-          <span className='cursor-pointer'>Logout</span>
+          <span className='cursor-pointer' onClick={signOut}>Logout</span>
         </>
       )}
     </>
