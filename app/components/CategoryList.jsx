@@ -1,53 +1,56 @@
-"use client"
+
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import coding from '../../public/coding.jpg';
-import tech from '../../public/tech.jpg';
-import fashion from '../../public/fashion.jpg';
-import culture from '../../public/culture.jpg';
-import food from '../../public/food.jpg';
 
+const getData = async () =>{
+  const res = await fetch('http://localhost:3000/api/categories', {
+    cache: 'no-store',
+  });
 
-const categoryLink = 'flex items-center gap-3 capitalize ml-6 font-semibold'
-const imageLink = 'rounded-[50%] '
-const CategoryList = () => {
+  if (!res.ok){
+    throw new Error('An error occured while fetching categories')
+  }
+
+  return res.json();
+};
+
+const CategoryList = async () => {
+
+  const data = await getData();
 
   return (
     <div>
       <h1 className='my-8 text-4xl font-semibold'>Categories</h1>{/* title */}
       <div className='flex flex-wrap justify-between gap-3'>{/* categories */}
-        <div className='flex items-center gap-3 capitalize w-[15%] h-[60px] bg-gradient-to-r from-sky-500 to-sky-700 rounded-lg'>{/* category */}
-          <Link href='' className={categoryLink}>
-            <Image src={tech} alt='' width={32} height={32} className={imageLink} />
-            Technology
-          </Link>
-        </div>
-        <div className='flex items-center gap-3 capitalize w-[15%] h-[60px] bg-gradient-to-r from-slate-400 to-slate-700 rounded-lg'>
-          <Link href='' className={categoryLink}>
-            <Image src={food} alt='' width={32} height={32} className={imageLink}/>
-            Food
-          </Link>
-        </div>
-        <div className='flex items-center gap-3 capitalize w-[15%] h-[60px] bg-gradient-to-r from-fuchsia-400 to-fuchsia-700 rounded-lg'>
-          <Link href='' className={categoryLink}>
-            <Image src={culture} alt='' width={32} height={32} className={imageLink} />
-            Culture
-          </Link>
-        </div>
-        <div className='flex items-center gap-3 capitalize w-[15%] h-[60px] bg-gradient-to-r from-pink-400 to-pink-700 rounded-lg'>
-          <Link href='' className={categoryLink}>
-            <Image src={fashion} alt='' width={32} height={32} className={imageLink}/>
-            Fashion
-          </Link>
-        </div>
-        <div className='flex items-center gap-3 capitalize w-[15%] h-[60px] bg-gradient-to-r from-purple-400 to-purple-700 rounded-lg'>
-          <Link href='' className={categoryLink}>
-            <Image src={coding} alt='' width={32} height={32} className={imageLink}/>
-            Coding
-          </Link>
-        </div>
+          {data?.map(item => (
+            <div className='flex capitalize font-semibold items-center p-2'>
+                <Link 
+                  href='/blog?cat=style' 
+                  className={`flex items-center gap-3 rounded-lg w-[160px] h-[50px] p-3 ${
+                  item.slug === 'fashion' ? 'bg-gradient-to-r from-pink-400 to-pink-700' :
+                  item.slug === 'food' ? 'bg-gradient-to-r from-slate-400 to-slate-700' :
+                  item.slug === 'code' ? 'bg-gradient-to-r from-purple-400 to-purple-700' :
+                  item.slug === 'technology' ? 'bg-gradient-to-r from-sky-500 to-sky-700' :
+                  item.slug === 'culture' ? 'bg-gradient-to-r from-fuchsia-400 to-fuchsia-700' :
+                  ''
+                  }`}
+                  key={item._id}
+                  >
+                  {item.img && (
+                    <Image 
+                      src={item.img} 
+                      alt='' 
+                      width={32} 
+                      height={32} 
+                      className='rounded-[50%]' 
+                    />
+                  )}
+                  {item.title}
+                </Link>
+            </div>
+          ))}
       </div>
     </div>
   )
